@@ -192,3 +192,18 @@ Since we are not using a pre-defined TV setup, we will override every code. Fire
 
 Script can be found here: https://github.com/Dsx2/HA-HisenseTVviaMQTT/blob/main/MQTTActions-HAScript
 
+Depending on what you want to do, you can just call the script now using something similar to:
+```
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_CHANNELUP
+```
+
+I have created a remote mimic, looks like this:
+![image](https://github.com/user-attachments/assets/d9d19e9d-3342-4319-9c40-2cc5ff1f3872)
+
+THe code for this can be found here:
+https://github.com/Dsx2/HA-HisenseTVviaMQTT/blob/main/custom%3Afiremote-card
+
+I hope this has helped ! Please reach out if you need help or see any improvements we can include
+
