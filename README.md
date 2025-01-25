@@ -136,3 +136,59 @@ How have I used it ?
 I have used the firemote card, override functions and scripts to get a nice working remote
 https://github.com/PRProd/HA-Firemote/
 
+# Step 3.1 - Set up Entities
+Initially let's set up some entities and devices so we can see our status
+
+NOTE : I AM USING WIFI AND NOT ETHERNET, SO I AM INTENTIONALLY AVOIDING MAGIC PACKETS AND RELYING SOLEY ON MQTT. Not the best, but im not ready to run an ethernet cable mid guide.
+
+In configuration.yaml dump the following;
+```
+switch:
+  - platform: template
+    switches:
+      hisense_tv:
+        icon_template: >
+          {% if is_state('sensor.hisense_tv','fake_sleep_0') %}
+            {{ 'mdi:television-classic-off' }}
+          {% else %}
+            {{ 'mdi:television-classic' }}
+          {% endif %}
+        friendly_name: 'Hisense TV'
+        value_template: >
+          {{ not is_state('sensor.hisense_tv', 'fake_sleep_0') }}
+        turn_on:
+          service: mqtt.publish
+          data:
+            topic: '/remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey'
+            payload: 'KEY_POWER'
+        turn_off:
+          service: mqtt.publish
+          data:
+            topic: '/remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey'
+            payload: 'KEY_POWER'
+mqtt:
+    sensor:
+     -  name: "Hisense TV"
+        state_topic: "/remoteapp/mobile/broadcast/ui_service/state"
+        value_template: "{{ value_json.statetype }}"
+```
+
+This created 2 things:
+1 - A sensor to tell whether the TV is on based on  an MQTT status
+
+2 - A swtich to turn the TV on and Off. If you are using a magic packet, replace the "turn on" in the above script with this
+
+```
+        turn_on:
+          service: wake_on_lan.send_magic_packet
+          data:
+            mac: 'TV_MAC_ADDRESS_CHANGE_IT_HERE'
+```
+
+# Step 3.2 - Make it friendly in Home Assistant
+I will be using the firemote card for this.
+
+Since we are not using a pre-defined TV setup, we will override every code. Firemote requires a script to do this, so we will create a script with "trigger id's". 
+
+Script can be found here: https://github.com/Dsx2/HA-HisenseTVviaMQTT/blob/main/MQTTActions-HAScript
+
