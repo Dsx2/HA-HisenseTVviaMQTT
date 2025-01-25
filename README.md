@@ -4,6 +4,8 @@ Good god this took a while to work out.
 
 We will be using the connection scheme and bridge schema  provided by https://github.com/sehaas/ha_hisense_tv/blob/main/README.md?plain=1
 
+I already had Mosquito Broker and Zigbee2MQTT installed, so I wont cover this. This script however ensures that both will work simultaneously.
+
 Connection shema:
 ```
 +-----------+          +-----------+
@@ -12,11 +14,13 @@ Connection shema:
 +-----------+          +-----------+
                             /\
                      bridge ||
-                            \/
-                      +-------------+
-                      | Hisense TV  |
-                      | MQTT Broker |
-                      +-------------+
+                   _ _ _ _ _ _ _ _ _ _
+                  ||                  ||
+                  \/                  \/
+          +-------------+       +-------------+ 
+          | Hisense TV  |       | Zigbee2MQTT |
+          | MQTT Broker |       | MQTT Broker |
+          +-------------+       +-------------+
 ```
 
 ## Step 1 - Authorise MQTT Client with Hisense TV
