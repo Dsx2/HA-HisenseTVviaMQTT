@@ -200,7 +200,9 @@ Depending on what you want to do, you can just call the script now using somethi
 ```
 
 I have created a remote mimic, looks like this:
-![image](https://github.com/user-attachments/assets/d9d19e9d-3342-4319-9c40-2cc5ff1f3872)
+
+![image](https://github.com/user-attachments/assets/055a0e25-8443-4fc3-b409-489f5882d4ce)
+
 
 THe code for this can be found here:
 https://github.com/Dsx2/HA-HisenseTVviaMQTT/blob/main/custom%3Afiremote-card
