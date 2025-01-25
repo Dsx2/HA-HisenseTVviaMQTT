@@ -136,7 +136,7 @@ How have I used it ?
 I have used the firemote card, override functions and scripts to get a nice working remote
 https://github.com/PRProd/HA-Firemote/
 
-# Step 3.1 - Set up Entities
+### Step 3.1 - Set up Entities
 Initially let's set up some entities and devices so we can see our status
 
 NOTE : I AM USING WIFI AND NOT ETHERNET, SO I AM INTENTIONALLY AVOIDING MAGIC PACKETS AND RELYING SOLEY ON MQTT. Not the best, but im not ready to run an ethernet cable mid guide.
@@ -185,7 +185,7 @@ This created 2 things:
             mac: 'TV_MAC_ADDRESS_CHANGE_IT_HERE'
 ```
 
-# Step 3.2 - Make it friendly in Home Assistant
+### Step 3.2 - Make it friendly in Home Assistant
 I will be using the firemote card for this.
 
 Since we are not using a pre-defined TV setup, we will override every code. Firemote requires a script to do this, so we will create a script with "trigger id's". 
