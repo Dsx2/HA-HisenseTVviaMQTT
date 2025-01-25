@@ -1,0 +1,137 @@
+alias: Hisense TV MQTT Actions
+fields:
+  key_name:
+    description: The key or action name (e.g., KEY_VOLUMEUP, INPUT_HDMI_1, NETFLIX)
+    example: KEY_VOLUMEUP
+sequence:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'POWER' }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: switch.hisense_tv
+                    state: "on"
+                sequence:
+                  - target:
+                      entity_id: switch.hisense_tv
+                    action: switch.turn_off
+                    data: {}
+              - conditions:
+                  - condition: state
+                    entity_id: switch.hisense_tv
+                    state: "off"
+                sequence:
+                  - target:
+                      entity_id: switch.hisense_tv
+                    action: switch.turn_on
+                    data: {}
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'INPUT_TV' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
+              payload: >-
+                {"displayname":"TV","hotel_mode":"","isDemo":false,"is_lock":"","is_signal":"","sourceid":"0","sourcename":"TV"}
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'INPUT_HDMI_1' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
+              payload: >-
+                {"displayname": "HDMI1","hotel_mode": "","isDemo":
+                false,"is_lock": "","is_signal": "","sourceid":
+                "4","sourcename": "HDMI1"}
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'INPUT_HDMI_2' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
+              payload: >-
+                {"displayname": "HDMI2","hotel_mode": "","isDemo":
+                false,"is_lock": "","is_signal": "","sourceid":
+                "5","sourcename": "HDMI2"}
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'INPUT_HDMI_3' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
+              payload: >-
+                {"displayname": "HDMI3","hotel_mode": "","isDemo":
+                false,"is_lock": "","is_signal": "","sourceid":
+                "6","sourcename": "HDMI3"}
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'KEY_VOLUMEUP' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
+              payload: KEY_VOLUMEUP
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'KEY_VOLUMEDOWN' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
+              payload: KEY_VOLUMEDOWN
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'KEY_CHANNELUP' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
+              payload: KEY_CHANNELUP
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'KEY_CHANNELDOWN' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
+              payload: KEY_CHANNELDOWN
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'KEY_HOME' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
+              payload: KEY_HOME
+            action: mqtt.publish
+      - conditions:
+          - condition: template
+            value_template: "{{ key_name == 'NETFLIX' }}"
+        sequence:
+          - data:
+              topic: >-
+                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/launchapp
+              payload: >-
+                {"appIcon":"","appId":"1","has_detail_page":0,"isLocalApp":1,"name":"Netflix","storeType":0,"type":0,"url":"netflix","urlType":37}
+            action: mqtt.publish
+    default:
+      - data:
+          name: Hisense TV MQTT
+          message: "Invalid key_name: {{ key_name }} provided."
+        action: logbook.log
+mode: single
