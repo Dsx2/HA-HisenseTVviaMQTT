@@ -78,7 +78,7 @@ sequence:
             action: mqtt.publish
       - conditions:
           - condition: template
-            value_template: "{{ key_name == 'Plex' }}"
+            value_template: "{{ key_name == 'PLEX' }}"
         sequence:
           - data:
               topic: >-
