@@ -145,6 +145,8 @@ Initially let's set up some entities and devices so we can see our status
 
 NOTE : I AM USING WIFI AND NOT ETHERNET, SO I AM INTENTIONALLY AVOIDING MAGIC PACKETS AND RELYING SOLEY ON MQTT. Not the best, but im not ready to run an ethernet cable mid guide.
 
+UPDATE: This didnt work, my tv has a WIFI Wake on LAN Setting - so i turned it on and used that instead.
+
 In configuration.yaml dump the following;
 ```
 switch:
