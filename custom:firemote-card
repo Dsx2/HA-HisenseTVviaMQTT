@@ -1,94 +1,193 @@
-alias: Hisense TV MQTT Actions
-fields:
-  key_name:
-    description: The key or action name (e.g., KEY_VOLUMEUP, INPUT_HDMI_1, NETFLIX)
-    example: KEY_VOLUMEUP
-sequence:
-  - choose:
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'POWER' }}"
-        sequence:
-          - choose:
-              - conditions:
-                  - condition: state
-                    entity_id: switch.hisense_tv
-                    state: "on"
-                sequence:
-                  - target:
-                      entity_id: switch.hisense_tv
-                    action: switch.turn_off
-              - conditions:
-                  - condition: state
-                    entity_id: switch.hisense_tv
-                    state: "off"
-                sequence:
-                  - target:
-                      entity_id: switch.hisense_tv
-                    action: switch.turn_on
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'INPUT_TV' }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
-              payload: >-
-                {"displayname":"TV","sourceid":"0","sourcename":"TV"}
-            action: mqtt.publish
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'INPUT_HDMI_1' }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/changesource
-              payload: >-
-                {"displayname":"HDMI1","sourceid":"4","sourcename":"HDMI1"}
-            action: mqtt.publish
-      # Adding new commands
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name in ['KEY_POWER', 'KEY_UP', 'KEY_DOWN', 'KEY_LEFT', 'KEY_RIGHT', 'KEY_RETURNS', 'KEY_MENU', 'KEY_EXIT', 'KEY_OK', 'KEY_HOME', 'KEY_VOLUMEUP', 'KEY_VOLUMEDOWN', 'KEY_MUTE', 'KEY_FORWARDS', 'KEY_BACK', 'KEY_STOP', 'KEY_PLAY', 'KEY_PAUSE', 'KEY_0', 'KEY_1', 'KEY_2', 'KEY_3', 'KEY_4', 'KEY_5', 'KEY_6', 'KEY_7', 'KEY_8', 'KEY_9', 'KEY_SUBTITLE'] }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/remote_service/XX:XX:XX:XX:XX:XX$normal/actions/sendkey
-              payload: "{{ key_name }}"
-            action: mqtt.publish
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'NETFLIX' }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/launchapp
-              payload: >-
-                {"appId":"1","name":"Netflix","url":"netflix","urlType":37}
-            action: mqtt.publish
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'HAYU' }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/launchapp
-              payload: >-
-                {"appId":"1","name":"Hayu","url":"hayu","urlType":37}
-            action: mqtt.publish
-      - conditions:
-          - condition: template
-            value_template: "{{ key_name == 'PLEX' }}"
-        sequence:
-          - data:
-              topic: >-
-                /remoteapp/tv/ui_service/XX:XX:XX:XX:XX:XX$normal/actions/launchapp
-              payload: >-
-                {"appId":"1","name":"Plex","url":"plex","urlType":37}
-            action: mqtt.publish
-    default:
-      - data:
-          name: Hisense TV MQTT
-          message: "Invalid key_name: {{ key_name }} provided."
-        action: logbook.log
-mode: single
+type: custom:firemote-card
+entity: none
+device_family: none
+device_type: other
+compatibility_mode: default
+defaultRemoteStyle_override: AF4
+button_overrides:
+  power-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: POWER
+  input-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: INPUT_TV
+  volume-up-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_VOLUMEUP
+  volume-down-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_VOLUMEDOWN
+  channel-up-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_CHANNELUP
+  channel-down-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_CHANNELDOWN
+  home-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_HOME
+  back-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_RETURNS
+  fastforward-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_FORWARDS
+  rewind-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_BACK
+  playpause-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_PLAY
+  mute-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_MUTE
+  subtitle-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_SUBTITLE
+  num0-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_0
+  num1-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_1
+  num2-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_2
+  num3-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_3
+  num4-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_4
+  num5-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_5
+  num6-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_6
+  num7-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_7
+  num8-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_8
+  num9-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_9
+  up-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_UP
+  down-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_DOWN
+  left-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_LEFT
+  right-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_RIGHT
+  center-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_OK
+  options-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_MENU
+  restart-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: POWER
+  tv-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: INPUT_TV
+  search-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_HOME
+  settings-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_MENU
+  voice-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_HOME
+  profile-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_HOME
+  apps-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: KEY_HOME
+  sleep-button:
+    script: hisense_tv_mqtt
+    data:
+      key_name: POWER
+app_launch_1: customlauncher Netflix
+app_launch_2: customlauncher Hayu
+app_launch_3: customlauncher Plex
+custom_launchers:
+  - friendly_name: Netflix
+    label: Netflix
+    color: red
+    background: white
+    script: hisense_tv_mqtt
+    data:
+      key_name: NETFLIX
+  - friendly_name: Hayu
+    label: Hayu
+    color: white
+    background: pink
+    script: hisense_tv_mqtt
+    data:
+      key_name: Hayu
+  - friendly_name: Plex
+    label: Plex
+    color: yellow
+    background: black
+    script: hisense_tv_mqtt
+    data:
+      key_name: Plex
+app_launcher_relative_size: 0
+card_mod:
+  style: |
+    ha-card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; /* Optional: Makes it fit the full height of its container */
+      margin: auto;
+    }
+grid_options:
+  columns: 12
+  rows: 11.38
